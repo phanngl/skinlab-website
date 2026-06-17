@@ -54,10 +54,10 @@ to `main`.
 1. In the repo: **Settings → Pages → Build and deployment → Source: GitHub
    Actions**.
 2. Set the **base path** so asset URLs resolve at your Pages address. Edit the
-   `BASE_PATH=/skinlab/` line in `.github/workflows/deploy.yml`:
+    `BASE_PATH=/skinlab-website/` line in `.github/workflows/deploy.yml`:
    - Project page (`https://<user>.github.io/<repo>/`): use `/<repo>/`.
    - User/org page or custom domain (served at `/`): use `/`.
    The build reads `BASE_PATH` (see `vite.config.ts`); locally you can run
-   `BASE_PATH=/skinlab/ npm run build:pages` to preview the same output.
+   `BASE_PATH=/skinlab-website/ npm run build:pages` to preview the same output.
 3. Push to `main` (or run the workflow manually). The `404.html` fallback lets
    deep links like `/services` survive a refresh on GitHub Pages.

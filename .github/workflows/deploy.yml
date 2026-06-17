@@ -24,7 +24,7 @@ jobs:
       # (e.g. https://<user>.github.io/skinlab/), or "/" for a custom domain
       # or user/org page (https://<user>.github.io/). Must match the path
       # GitHub Pages serves the site from.
-      - run: BASE_PATH=/skinlab/ npm run build:pages
+      - run: BASE_PATH=/skinlab-website/ npm run build:pages
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/client

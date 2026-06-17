@@ -15,7 +15,7 @@ Marketing site for the **Skinlab, by Dr Phuc** skincare clinic — 3 pages (Home
 ## Static SPA / GitHub Pages
 
 - The app is client-rendered; routes are prerendered to static HTML. **No server is used at runtime.**
-- `BASE_PATH` env var sets the deploy base path (see `vite.config.ts`): `/skinlab/` for a project page, `/` for a custom/user-page domain. Build with e.g. `BASE_PATH=/skinlab/ npm run build:pages`.
+- `BASE_PATH` env var sets the deploy base path (see `vite.config.ts`): `/skinlab-website/` for a project page, `/` for a custom/user-page domain. Build with e.g. `BASE_PATH=/skinlab-website/ npm run build:pages`.
 - Internal navigation uses the router `<Link>` (handles the base path). For static assets / non-router hrefs, use `withBase()` from `src/lib/base.ts`.
 - Deploy is via `.github/workflows/deploy.yml`; static output dir is `dist/client`.
 
