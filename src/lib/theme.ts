@@ -120,8 +120,8 @@ export function themeCss(mainHex: string, accentHex: string): string {
   return `${toBlock(':root', light)}\n${toBlock('.dark', dark)}`
 }
 
-export const DEFAULT_MAIN = '#9ebfae'
-export const DEFAULT_ACCENT = '#edbcc7'
+export const DEFAULT_MAIN = '#93e3fd'
+export const DEFAULT_ACCENT = '#cefff8'
 
 export interface AccentSuggestion {
   name: string
@@ -172,7 +172,7 @@ export interface Preset {
 // Hand-picked, harmony-checked combinations so a non-designer can pick a
 // guaranteed-good look in one click. All soft & cool — no yellow, no harsh teal.
 export const PRESETS: Preset[] = [
-  { name: 'Sage & Blush', main: DEFAULT_MAIN, accent: DEFAULT_ACCENT },
+  { name: 'Sky & Aqua', main: DEFAULT_MAIN, accent: DEFAULT_ACCENT },
   { name: 'Sky & Rose', main: '#a9c3d6', accent: '#e8b4c1' },
   { name: 'Lilac & Sage', main: '#c0b6d4', accent: '#b3d0bf' },
   { name: 'Eucalyptus & Plum', main: '#9fc0b3', accent: '#d8a7c4' },

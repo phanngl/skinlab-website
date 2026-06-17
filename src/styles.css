@@ -12,18 +12,18 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond Variable', Georgia, serif;
 
-  /* Accent: soft blush-rose pastel, complementary to the sage hue. */
-  --color-aqua: #edbcc7;
-  --color-aqua-deep: #a8576b;
-  --color-aqua-ink: #9c5163;
-  /* Light theme built on a single sage hue (#9ebfae) — no warm/yellow tones. */
-  --color-base: #e8f0eb;
-  --color-surface: #f3f8f5;
-  --color-tint: #9ebfae;
-  --color-tint-soft: #d3e3da;
-  --color-tint-card: #b8d2c5;
-  --color-ink: #24302a;
-  --color-muted: #586a61;
+  /* Accent: soft aqua pastel, complementary to the sky-blue main hue. */
+  --color-aqua: #cefff8;
+  --color-aqua-deep: #29a391;
+  --color-aqua-ink: #30a694;
+  /* Light theme built on a single sky-blue hue (#93e3fd) — no warm/yellow tones. */
+  --color-base: #e4eef1;
+  --color-surface: #f2f6f7;
+  --color-tint: #93e3fd;
+  --color-tint-soft: #b8e9fa;
+  --color-tint-card: #55d2fc;
+  --color-ink: #1d2f35;
+  --color-muted: #53686e;
 
   --radius-4xl: 2rem;
 }
@@ -57,14 +57,14 @@ body {
    utility resolves these via var(), so the whole UI flips automatically. */
 .dark {
   color-scheme: dark;
-  /* Dark theme = nighttime version of the same sage hue. */
-  --color-base: #0d1512;
-  --color-surface: #16221c;
-  --color-tint: #111b16;
-  --color-tint-soft: #1a2620;
-  --color-tint-card: #2a3d32;
-  --color-ink: #e7efe9;
-  --color-muted: #9bb0a4;
-  --color-aqua-ink: #edb3c1;
-  --color-aqua-deep: #cf8497;
+  /* Dark theme = nighttime version of the same sky-blue hue. */
+  --color-base: #0e1416;
+  --color-surface: #161f22;
+  --color-tint: #12191c;
+  --color-tint-soft: #1b2428;
+  --color-tint-card: #2c3a3f;
+  --color-ink: #e8eced;
+  --color-muted: #a9b7bc;
+  --color-aqua-ink: #acf6eb;
+  --color-aqua-deep: #6ce5d3;
 }
