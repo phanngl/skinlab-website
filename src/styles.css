@@ -13,15 +13,15 @@
   --font-serif: 'Cormorant Garamond Variable', Georgia, serif;
 
   --color-aqua: #42e6f5;
-  --color-aqua-deep: #1aa3bf;
-  --color-aqua-ink: #0e7d8c;
-  --color-base: #e6ecee;
-  --color-surface: #f3f6f6;
-  --color-tint: #dbe8ea;
-  --color-tint-soft: #e7eff0;
-  --color-tint-card: #cbe0e3;
-  --color-ink: #15303a;
-  --color-muted: #5a6f78;
+  --color-aqua-deep: #16808f;
+  --color-aqua-ink: #0e7480;
+  --color-base: #e8dfd0;
+  --color-surface: #f2ece1;
+  --color-tint: #ddd2c1;
+  --color-tint-soft: #e9e1d3;
+  --color-tint-card: #dacfbb;
+  --color-ink: #2c2620;
+  --color-muted: #6f6658;
 
   --radius-4xl: 2rem;
 }
