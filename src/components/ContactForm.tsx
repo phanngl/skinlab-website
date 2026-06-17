@@ -41,7 +41,7 @@ export function ContactForm() {
     )
   }
 
-  const field = 'w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-ink outline-none focus:border-aqua'
+  const field = 'w-full rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-ink outline-none focus:border-aqua'
   return (
     <form onSubmit={onSubmit} className="space-y-5" noValidate>
       <div>
