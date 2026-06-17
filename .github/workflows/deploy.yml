@@ -20,10 +20,8 @@ jobs:
           node-version: 22
       - run: npm install -g npm@latest
       - run: npm install
-      # TODO(owner): set BASE_PATH to "/<repo>/" for a project page
-      # (e.g. https://<user>.github.io/skinlab/), or "/" for a custom domain
-      # or user/org page (https://<user>.github.io/). Must match the path
-      # GitHub Pages serves the site from.
+      # BASE_PATH must match the deploy subpath:
+      # "/<repo>/" for a project page, "/" for a user/custom domain.
       - run: BASE_PATH=/skinlab-website/ npm run build:pages
       - uses: actions/upload-pages-artifact@v3
         with:
