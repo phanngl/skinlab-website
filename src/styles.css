@@ -12,16 +12,18 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond Variable', Georgia, serif;
 
-  --color-aqua: #42e6f5;
-  --color-aqua-deep: #16808f;
-  --color-aqua-ink: #0e7480;
-  --color-base: #e8dfd0;
-  --color-surface: #f2ece1;
-  --color-tint: #ddd2c1;
-  --color-tint-soft: #e9e1d3;
-  --color-tint-card: #dacfbb;
-  --color-ink: #2c2620;
-  --color-muted: #6f6658;
+  /* Accent: soft blush-rose pastel, complementary to the sage hue. */
+  --color-aqua: #edbcc7;
+  --color-aqua-deep: #a8576b;
+  --color-aqua-ink: #9c5163;
+  /* Light theme built on a single sage hue (#9ebfae) — no warm/yellow tones. */
+  --color-base: #e8f0eb;
+  --color-surface: #f3f8f5;
+  --color-tint: #9ebfae;
+  --color-tint-soft: #d3e3da;
+  --color-tint-card: #b8d2c5;
+  --color-ink: #24302a;
+  --color-muted: #586a61;
 
   --radius-4xl: 2rem;
 }
@@ -55,13 +57,14 @@ body {
    utility resolves these via var(), so the whole UI flips automatically. */
 .dark {
   color-scheme: dark;
-  --color-base: #0b1417;
-  --color-surface: #14242b;
-  --color-tint: #0f1f25;
-  --color-tint-soft: #16272e;
-  --color-tint-card: #1e3a43;
-  --color-ink: #e7eef0;
-  --color-muted: #9bb0b7;
-  --color-aqua-ink: #5fd3e3;
-  --color-aqua-deep: #46c6e0;
+  /* Dark theme = nighttime version of the same sage hue. */
+  --color-base: #0d1512;
+  --color-surface: #16221c;
+  --color-tint: #111b16;
+  --color-tint-soft: #1a2620;
+  --color-tint-card: #2a3d32;
+  --color-ink: #e7efe9;
+  --color-muted: #9bb0a4;
+  --color-aqua-ink: #edb3c1;
+  --color-aqua-deep: #cf8497;
 }

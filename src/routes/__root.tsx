@@ -5,6 +5,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import appCss from '../styles.css?url'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
+import { ThemePicker } from '../components/ThemePicker'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -39,10 +40,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Apply the saved/system theme before paint to avoid a flash. */}
+        {/* Apply the saved/system theme + any owner-tuned colors before paint. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark');var c=localStorage.getItem('tuneCss');if(c){var s=document.createElement('style');s.id='theme-tune';s.textContent=c;document.head.appendChild(s);}}catch(e){}})();`,
           }}
         />
         <HeadContent />
@@ -51,6 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <ThemePicker />
         <TanStackDevtools
           config={{
             position: 'bottom-right',
