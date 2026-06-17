@@ -3,6 +3,8 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import appCss from '../styles.css?url'
+import { Navbar } from '../components/Navbar'
+import { Footer } from '../components/Footer'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -15,7 +17,12 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Skinlab — by Dr Phuc',
+      },
+      {
+        name: 'description',
+        content:
+          'Skinlab, by Dr Phuc — science-led skincare treatments in a calm, modern clinic.',
       },
     ],
     links: [
@@ -35,7 +42,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
         <TanStackDevtools
           config={{
             position: 'bottom-right',

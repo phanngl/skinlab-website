@@ -25,7 +25,7 @@ export function Footer() {
               <a key={s.label} href={s.href} className="hover:text-aqua-ink">{s.label}</a>
             ))}
           </div>
-          <Link to={'/contact' as string} className="mt-3 inline-block font-medium text-aqua-ink">Book a consultation →</Link>
+          <Link to="/contact" className="mt-3 inline-block font-medium text-aqua-ink">Book a consultation →</Link>
         </div>
       </Container>
       <Container className="border-t border-ink/5 py-6 text-xs text-muted">
