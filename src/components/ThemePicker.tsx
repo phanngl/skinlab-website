@@ -185,6 +185,18 @@ export function ThemePicker() {
   )
 }
 
+const HEX_RE = /^#[0-9a-fA-F]{6}$/
+
+function normalizeHex(input: string): string | null {
+  let v = input.trim()
+  if (v && !v.startsWith('#')) v = `#${v}`
+  // Expand shorthand #abc → #aabbcc.
+  if (/^#[0-9a-fA-F]{3}$/.test(v)) {
+    v = `#${v[1]}${v[1]}${v[2]}${v[2]}${v[3]}${v[3]}`
+  }
+  return HEX_RE.test(v) ? v.toLowerCase() : null
+}
+
 function Swatch({
   label,
   value,
@@ -194,11 +206,46 @@ function Swatch({
   value: string
   onChange: (hex: string) => void
 }) {
+  // Local text state lets the owner type freely; we only commit a valid hex.
+  const [text, setText] = useState(value)
+  // Keep the field in sync when the value changes elsewhere (presets, picker…)
+  // by adjusting state during render rather than in an effect.
+  const [prevValue, setPrevValue] = useState(value)
+  if (value !== prevValue) {
+    setPrevValue(value)
+    setText(value)
+  }
+
+  const commit = (raw: string) => {
+    const hex = normalizeHex(raw)
+    if (hex) onChange(hex)
+    else setText(value) // revert invalid input to the last good value
+  }
+
+  const valid = normalizeHex(text) !== null
+
   return (
     <label className="mb-2 flex items-center justify-between gap-3">
       <span className="text-xs text-muted">{label}</span>
       <span className="flex items-center gap-2">
-        <span className="font-mono text-[11px] uppercase text-ink/70">{value}</span>
+        <input
+          type="text"
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value)
+            const hex = normalizeHex(e.target.value)
+            if (hex) onChange(hex)
+          }}
+          onBlur={(e) => commit(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') commit((e.target as HTMLInputElement).value)
+          }}
+          spellCheck={false}
+          aria-label={`${label} hex value`}
+          className={`w-20 rounded border bg-base px-1.5 py-1 font-mono text-[11px] uppercase text-ink/80 ${
+            valid ? 'border-ink/15' : 'border-red-400'
+          }`}
+        />
         <input
           type="color"
           value={value}
