@@ -17,9 +17,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
-      - run: npm ci
+      - run: npm ci --prefer-offline
       # TODO(owner): set BASE_PATH to "/<repo>/" for a project page
       # (e.g. https://<user>.github.io/skinlab/), or "/" for a custom domain
       # or user/org page (https://<user>.github.io/). Must match the path
