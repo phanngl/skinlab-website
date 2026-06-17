@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Container } from './Container'
 import { Button } from './Button'
+import { ThemeToggle } from './ThemeToggle'
 import { site } from '../config/site'
 
 const links = [
@@ -24,13 +25,17 @@ export function Navbar() {
               {l.label}
             </Link>
           ))}
+          <ThemeToggle />
           <Button to="/contact">{site.hero.cta}</Button>
         </nav>
-        <button className="md:hidden" onClick={() => setOpen((v) => !v)} aria-label="Toggle menu">
+        <div className="flex items-center gap-2 md:hidden">
+        <ThemeToggle />
+        <button onClick={() => setOpen((v) => !v)} aria-label="Toggle menu">
           <span className="block h-0.5 w-6 bg-ink" />
           <span className="mt-1.5 block h-0.5 w-6 bg-ink" />
           <span className="mt-1.5 block h-0.5 w-6 bg-ink" />
         </button>
+        </div>
       </Container>
       {open && (
         <Container className="flex flex-col gap-4 pb-6 md:hidden">

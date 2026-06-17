@@ -4,7 +4,7 @@ import { clsx } from 'clsx'
 type Variant = 'primary' | 'secondary'
 const base = 'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition'
 const variants: Record<Variant, string> = {
-  primary: 'bg-aqua text-ink hover:bg-aqua-deep hover:text-white',
+  primary: 'bg-aqua text-[#0b1417] hover:bg-aqua-deep hover:text-white',
   secondary: 'border border-ink/15 text-ink hover:border-aqua hover:text-aqua-ink',
 }
 

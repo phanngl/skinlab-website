@@ -72,7 +72,7 @@ export function ContactForm() {
         {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
       </div>
       {status === 'error' && <p className="text-sm text-red-500">Something went wrong. Please try again or call us.</p>}
-      <button type="submit" disabled={status === 'submitting'} className="inline-flex items-center justify-center rounded-full bg-aqua px-6 py-3 text-sm font-semibold text-ink transition hover:bg-aqua-deep hover:text-white disabled:opacity-60">
+      <button type="submit" disabled={status === 'submitting'} className="inline-flex items-center justify-center rounded-full bg-aqua px-6 py-3 text-sm font-semibold text-[#0b1417] transition hover:bg-aqua-deep hover:text-white disabled:opacity-60">
         {status === 'submitting' ? 'Sending…' : 'Send message'}
       </button>
     </form>
