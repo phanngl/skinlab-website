@@ -11,6 +11,7 @@
     "build": "vite build",
     "build:pages": "vite build && cp dist/client/index.html dist/client/404.html",
     "preview": "vite preview",
+    "lint": "eslint .",
     "test": "vitest run"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.132.0",
@@ -40,8 +42,12 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.5.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.6.0",
     "jsdom": "^28.1.0",
     "typescript": "^6.0.2",
+    "typescript-eslint": "^8.61.1",
     "vite": "^8.0.0",
     "vitest": "^4.1.5"
   },
