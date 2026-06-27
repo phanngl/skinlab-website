@@ -14,7 +14,7 @@ const links = [
 export function Navbar() {
   const [open, setOpen] = useState(false)
   return (
-    <header className="sticky top-0 z-50 border-b border-ink/5 bg-surface/80 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-ink/5 bg-surface/80 backdrop-blur dark:border-white/10">
       <Container className="flex h-16 items-center justify-between">
         <Link to="/" className="font-serif text-2xl text-ink">
           {site.name} <span className="text-base text-muted">{site.tagline}</span>

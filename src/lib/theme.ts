@@ -1,6 +1,6 @@
-// Derive the full semantic-token palette from two anchor colors:
-//   main   — the sage neutral hue (drives base/surface/tint/ink/muted)
-//   accent — the blush pastel accent (drives aqua / aqua-deep / aqua-ink)
+// Derive the full semantic-token palette from a single anchor hex, producing a
+// Tailwind-style monochromatic palette. All tokens — base, tint, ink, aqua —
+// come from the same hue family, varying only in lightness and saturation.
 // Used by the owner-facing ThemePicker to preview new colors live, and as the
 // single source of truth for what each anchor expands into.
 
@@ -65,7 +65,7 @@ export function hslToHex({ h, s, l }: HSL): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
-/** Produce a hex from a base hue, overriding any of saturation/lightness. */
+/** Produce a hex from a base hue, overriding saturation and lightness. */
 function shade(base: HSL, s: number, l: number): string {
   return hslToHex({ h: base.h, s: clamp(s, 0, 100), l: clamp(l, 0, 100) })
 }
@@ -77,35 +77,50 @@ export interface DerivedTheme {
   dark: ThemeVars
 }
 
-export function deriveTheme(mainHex: string, accentHex: string): DerivedTheme {
-  const m = hexToHsl(mainHex)
-  const a = hexToHsl(accentHex)
+// Tailwind-style monochromatic token positions (lightness + saturation per token).
+// All derived from a single hue — the "aqua" tokens use the same hue, just at
+// different lightness/saturation positions.
+const MONO_LIGHT: Record<string, [s: number, l: number]> = {
+  'color-base':      [15, 97],
+  'color-surface':   [10, 96],
+  'color-tint-soft': [50, 90],
+  'color-tint':      [60, 80],
+  'color-tint-card': [75, 62],
+  'color-aqua':      [35, 92],
+  'color-aqua-deep': [65, 48],
+  'color-aqua-ink':  [45, 28],
+  'color-ink':       [20, 12],
+  'color-muted':     [30, 38],
+}
+
+const MONO_DARK: Record<string, [s: number, l: number]> = {
+  'color-base':      [20,  6],
+  'color-surface':   [22, 16],
+  'color-tint':      [20,  9],
+  'color-tint-soft': [18, 18],
+  'color-tint-card': [12, 22],
+  'color-aqua':      [35, 92],   // light accent stays light on dark bg
+  'color-aqua-deep': [55, 62],   // richer accent saturation
+  'color-aqua-ink':  [55, 85],   // deeper tint for headings
+  'color-ink':       [18, 92],   // slightly tinted white
+  'color-muted':     [18, 68],   // tinted secondary
+}
+
+/** Derive a full Tailwind-style monochromatic palette from a single hex. */
+export function deriveMonoTheme(hex: string): DerivedTheme {
+  const h = hexToHsl(hex)
+
+  const map = (specs: Record<string, [number, number]>): ThemeVars => {
+    const vars: ThemeVars = {}
+    for (const [k, [s, l]] of Object.entries(specs)) {
+      vars[k] = shade(h, s, l)
+    }
+    return vars
+  }
 
   return {
-    light: {
-      'color-base': shade(m, Math.min(m.s, 30), 92),
-      'color-surface': shade(m, Math.min(m.s, 26), 96),
-      'color-tint': mainHex,
-      'color-tint-soft': shade(m, m.s * 0.9, 85),
-      'color-tint-card': shade(m, m.s, Math.max(0, m.l - 12)),
-      'color-ink': shade(m, Math.min(m.s + 8, 30), 16),
-      'color-muted': shade(m, 14, 38),
-      'color-aqua': accentHex,
-      'color-aqua-deep': shade(a, a.s * 0.6, 40),
-      'color-aqua-ink': shade(a, a.s * 0.55, 42),
-    },
-    dark: {
-      'color-base': shade(m, 22, 7),
-      'color-surface': shade(m, 20, 11),
-      'color-tint': shade(m, 22, 9),
-      'color-tint-soft': shade(m, 20, 13),
-      'color-tint-card': shade(m, 18, 21),
-      'color-ink': shade(m, 14, 92),
-      'color-muted': shade(m, 12, 70),
-      'color-aqua': accentHex,
-      'color-aqua-deep': shade(a, a.s * 0.7, 66),
-      'color-aqua-ink': shade(a, a.s * 0.8, 82),
-    },
+    light: map(MONO_LIGHT),
+    dark: map(MONO_DARK),
   }
 }
 
@@ -115,66 +130,42 @@ const toBlock = (selector: string, vars: ThemeVars) =>
     .join('')}}`
 
 /** CSS that overrides the default tokens for both light and dark mode. */
-export function themeCss(mainHex: string, accentHex: string): string {
-  const { light, dark } = deriveTheme(mainHex, accentHex)
+export function themeCss(hex: string): string {
+  const { light, dark } = deriveMonoTheme(hex)
   return `${toBlock(':root', light)}\n${toBlock('.dark', dark)}`
 }
 
-export const DEFAULT_MAIN = '#93e3fd'
-export const DEFAULT_ACCENT = '#cefff8'
+export const DEFAULT_MAIN = '#cefff8'
 
-export interface AccentSuggestion {
+export interface ShadeSuggestion {
   name: string
   hex: string
 }
 
-// Rotate a hue, but skip the muddy yellow / yellow-green band (per the
-// "no yellow" rule) by snapping it to a universally-soft rose.
-function harmonyHue(baseHue: number, offset: number): number {
-  let h = (baseHue + offset + 360) % 360
-  if (h >= 40 && h <= 95) h = 345
-  return h
-}
-
-// Dynamically suggest harmonious pastel accents for a chosen main colour using
-// classic colour-wheel formulas, so a non-designer gets flattering options
-// without knowing any colour theory. Every result is forced to a soft pastel
-// (fixed lightness, capped saturation) so it always reads gently.
-export function suggestAccents(mainHex: string): AccentSuggestion[] {
-  const m = hexToHsl(mainHex)
-  const s = clamp(Math.max(m.s, 30) + 25, 45, 62)
-  const pastel = (offset: number) =>
-    hslToHex({ h: harmonyHue(m.h, offset), s, l: 83 })
-
-  const raw: AccentSuggestion[] = [
-    { name: 'Complementary', hex: pastel(180) },
-    { name: 'Soft contrast', hex: pastel(160) },
-    { name: 'Warm contrast', hex: pastel(205) },
-    { name: 'Triadic', hex: pastel(120) },
-  ]
-
-  // Drop any near-duplicates the yellow-snap may have produced.
-  const seen = new Set<string>()
-  return raw.filter((c) => (seen.has(c.hex) ? false : (seen.add(c.hex), true)))
-}
-
-/** The single best (complementary) accent for a main colour. */
-export function suggestAccent(mainHex: string): string {
-  return suggestAccents(mainHex)[0].hex
+// Suggest lightness variations around the anchor — gives the owner interesting
+// alternatives within the same hue family (mono palette).
+export function suggestShades(hex: string): ShadeSuggestion[] {
+  const h = hexToHsl(hex)
+  return [
+    { name: 'Lighter', hex: shade(h, clamp(h.s - 10, 20, 90), 88) },
+    { name: 'Deeper',  hex: shade(h, clamp(h.s + 5, 20, 90), 64) },
+    { name: 'Muted',   hex: shade(h, clamp(h.s - 25, 10, 80), 75) },
+    { name: 'Vibrant', hex: shade(h, clamp(h.s + 15, 20, 95), 72) },
+  ].filter((a, i, arr) => arr.findIndex((b) => b.hex === a.hex) === i)
 }
 
 export interface Preset {
   name: string
-  main: string
-  accent: string
+  hex: string
 }
 
-// Hand-picked, harmony-checked combinations so a non-designer can pick a
-// guaranteed-good look in one click. All soft & cool — no yellow, no harsh teal.
+// Curated monochromatic starting points — each gives a complete Tailwind-style
+// mono palette when run through deriveMonoTheme(). First entry is the default.
 export const PRESETS: Preset[] = [
-  { name: 'Sky & Aqua', main: DEFAULT_MAIN, accent: DEFAULT_ACCENT },
-  { name: 'Sky & Rose', main: '#a9c3d6', accent: '#e8b4c1' },
-  { name: 'Lilac & Sage', main: '#c0b6d4', accent: '#b3d0bf' },
-  { name: 'Eucalyptus & Plum', main: '#9fc0b3', accent: '#d8a7c4' },
-  { name: 'Slate & Petal', main: '#aebac4', accent: '#e6b3c4' },
+  { name: 'Ice',          hex: '#cefff8' },
+  { name: 'Sky Blue',     hex: '#93e3fd' },
+  { name: 'Teal',         hex: '#6cc3d0' },
+  { name: 'Slate',        hex: '#94a8b8' },
+  { name: 'Lavender',     hex: '#b8aed4' },
+  { name: 'Rose',         hex: '#d4aeb8' },
 ]

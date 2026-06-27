@@ -10,7 +10,7 @@ export function Eyebrow({ children, className }: { children: React.ReactNode; cl
 
 export function Heading({ as: As = 'h2', children, className }: { as?: 'h1' | 'h2' | 'h3'; children: React.ReactNode; className?: string }) {
   return (
-    <As className={clsx('font-serif text-ink', As === 'h1' ? 'text-5xl/[1.05] md:text-6xl/[1.05]' : 'text-4xl/[1.1] md:text-5xl/[1.1]', className)}>
+    <As className={clsx('font-serif font-semibold text-ink', As === 'h1' ? 'text-5xl/[1.05] md:text-6xl/[1.05]' : 'text-4xl/[1.1] md:text-5xl/[1.1]', className)}>
       {children}
     </As>
   )

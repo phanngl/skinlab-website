@@ -1,12 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import {
-  DEFAULT_ACCENT,
   DEFAULT_MAIN,
-  deriveTheme,
+  deriveMonoTheme,
   hexToHsl,
   hslToHex,
-  suggestAccent,
-  suggestAccents,
+  suggestShades,
   themeCss,
 } from './theme'
 
@@ -29,13 +27,12 @@ describe('hex <-> hsl', () => {
   })
 })
 
-describe('deriveTheme', () => {
-  const t = deriveTheme(DEFAULT_MAIN, DEFAULT_ACCENT)
+describe('deriveMonoTheme', () => {
+  const t = deriveMonoTheme(DEFAULT_MAIN)
 
-  it('uses the anchors directly for tint and aqua', () => {
-    expect(t.light['color-tint']).toBe(DEFAULT_MAIN)
-    expect(t.light['color-aqua']).toBe(DEFAULT_ACCENT)
-    expect(t.dark['color-aqua']).toBe(DEFAULT_ACCENT)
+  it('generates all 10 light and 10 dark tokens', () => {
+    expect(Object.keys(t.light)).toHaveLength(10)
+    expect(Object.keys(t.dark)).toHaveLength(10)
   })
 
   it('makes light surfaces bright and dark surfaces dark', () => {
@@ -43,54 +40,43 @@ describe('deriveTheme', () => {
     expect(hexToHsl(t.dark['color-base']).l).toBeLessThan(15)
   })
 
-  it('keeps every token in the main hue family for neutrals', () => {
+  it('keeps every token in the same hue family', () => {
     const mainHue = hexToHsl(DEFAULT_MAIN).h
-    // Near-white tokens drift more from 8-bit rounding; allow a generous bound.
-    for (const key of ['color-base', 'color-surface', 'color-tint-soft']) {
-      expect(Math.abs(hexToHsl(t.light[key]).h - mainHue)).toBeLessThanOrEqual(12)
+    // All tokens should be within 15° hue of the anchor — rounding drift only.
+    for (const mode of ['light', 'dark'] as const) {
+      for (const hex of Object.values(t[mode])) {
+        const { h } = hexToHsl(hex)
+        expect(Math.abs(h - mainHue)).toBeLessThanOrEqual(18)
+      }
     }
   })
 })
 
-describe('suggestAccents', () => {
-  it('always returns soft pastels (high lightness, capped saturation)', () => {
-    for (const main of ['#9ebfae', '#a9c3d6', '#c0b6d4', '#aebac4', '#7a5c33']) {
-      for (const { hex } of suggestAccents(main)) {
-        const { s, l } = hexToHsl(hex)
-        expect(l).toBeGreaterThan(75)
-        expect(s).toBeLessThanOrEqual(64)
-      }
+describe('suggestShades', () => {
+  it('returns 4 lightness variants close to the anchor', () => {
+    const shades = suggestShades(DEFAULT_MAIN)
+    expect(shades).toHaveLength(4)
+    for (const s of shades) {
+      expect(s.hex).toMatch(/^#[0-9a-f]{6}$/)
+      expect(s.name).toBeTruthy()
     }
   })
 
-  it('never suggests a yellow / yellow-green hue', () => {
-    for (const main of ['#c0b6d4', '#b6c0a0', '#9ebfae']) {
-      for (const { hex } of suggestAccents(main)) {
-        const { h } = hexToHsl(hex)
-        expect(h < 38 || h > 97).toBe(true)
-      }
-    }
-  })
-
-  it('suggests a hue distinct from the main (contrast, not match)', () => {
+  it('keeps all shades in the same hue family', () => {
     const mainHue = hexToHsl(DEFAULT_MAIN).h
-    const accentHue = hexToHsl(suggestAccent(DEFAULT_MAIN)).h
-    const raw = Math.abs(accentHue - mainHue)
-    const dist = Math.min(raw, 360 - raw) // angular distance, 0–180
-    expect(dist).toBeGreaterThan(120) // roughly opposite on the wheel
-  })
-
-  it('returns deduplicated options', () => {
-    const hexes = suggestAccents('#9ebfae').map((c) => c.hex)
-    expect(new Set(hexes).size).toBe(hexes.length)
+    for (const { hex } of suggestShades(DEFAULT_MAIN)) {
+      const { h } = hexToHsl(hex)
+      expect(Math.abs(h - mainHue)).toBeLessThanOrEqual(5)
+    }
   })
 })
 
 describe('themeCss', () => {
   it('emits :root and .dark blocks with custom properties', () => {
-    const css = themeCss(DEFAULT_MAIN, DEFAULT_ACCENT)
+    const css = themeCss(DEFAULT_MAIN)
     expect(css).toContain(':root{')
     expect(css).toContain('.dark{')
-    expect(css).toContain(`--color-tint:${DEFAULT_MAIN};`)
+    expect(css).toContain('--color-tint:')
+    expect(css).toContain('--color-aqua:')
   })
 })

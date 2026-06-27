@@ -19,13 +19,13 @@ function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-tint">
+      <section className="relative overflow-hidden bg-[color-mix(in_oklch,var(--color-tint)_35%,var(--color-tint-soft)_65%)] dark:bg-surface">
         <Gradient />
         <Container className="relative grid items-center gap-12 py-20 md:grid-cols-2 md:py-28">
           <div>
             <Eyebrow>{site.hero.eyebrow}</Eyebrow>
-            <Heading as="h1" className="mt-4">
-              {pre}<em className="not-italic text-aqua-deep italic">{site.hero.italicWord}</em>{post}
+            <Heading as="h1" className="mt-4 dark:text-aqua-ink">
+              {pre}<em className="not-italic text-[color-mix(in_oklch,var(--color-aqua-ink)_50%,var(--color-aqua-deep)_50%)] italic">{site.hero.italicWord}</em>{post}
             </Heading>
             <Lead className="mt-6 max-w-md">{site.hero.lead}</Lead>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -43,7 +43,7 @@ function Home() {
       <Container className="grid grid-cols-1 gap-8 py-16 sm:grid-cols-3">
         {site.stats.map((s) => (
           <div key={s.label} className="text-center">
-            <p className="font-serif text-5xl text-aqua-deep">{s.value}</p>
+            <p className="font-serif text-5xl text-[color-mix(in_oklch,var(--color-aqua-ink)_65%,var(--color-aqua-deep)_35%)]">{s.value}</p>
             <p className="mt-2 text-sm text-muted">{s.label}</p>
           </div>
         ))}
@@ -64,7 +64,7 @@ function Home() {
       </Container>
 
       {/* Meet Dr Phuc */}
-      <section className="bg-tint">
+      <section className="bg-[color-mix(in_oklch,var(--color-tint)_35%,var(--color-tint-soft)_65%)] dark:bg-surface">
         <Container className="grid items-center gap-12 py-20 md:grid-cols-2">
           <FadeIn>
             <img src={site.doctor.image} alt={site.doctor.name} className="aspect-square w-full rounded-4xl object-cover shadow-lg" loading="lazy" />

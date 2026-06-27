@@ -14,7 +14,7 @@ function Services() {
   const categories = [...new Set(site.services.map((s) => s.category))]
   return (
     <>
-      <section className="relative overflow-hidden bg-tint">
+      <section className="relative overflow-hidden bg-[color-mix(in_oklch,var(--color-tint)_35%,var(--color-tint-soft)_65%)] dark:bg-surface">
         <Gradient />
         <Container className="relative py-20 md:py-24">
           <Eyebrow>Our services</Eyebrow>
@@ -34,7 +34,7 @@ function Services() {
         </Container>
       ))}
 
-      <section className="bg-tint">
+      <section className="bg-[color-mix(in_oklch,var(--color-tint)_35%,var(--color-tint-soft)_65%)] dark:bg-surface">
         <Container className="py-20">
           <FadeIn className="max-w-2xl"><Eyebrow>What to expect</Eyebrow><Heading className="mt-3">A calm, four-step journey.</Heading></FadeIn>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

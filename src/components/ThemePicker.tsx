@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import {
-  DEFAULT_ACCENT,
   DEFAULT_MAIN,
   PRESETS,
-  suggestAccents,
+  suggestShades,
   themeCss,
 } from '../lib/theme'
 
 const STYLE_ID = 'theme-tune'
-const KEY_MAIN = 'tuneMain'
-const KEY_ACCENT = 'tuneAccent'
+const KEY_HEX = 'tuneHex'
 const KEY_CSS = 'tuneCss'
 
 // Only show the picker when the URL contains ?tune — keeps it hidden from
@@ -42,32 +40,28 @@ export function ThemePicker() {
   const [enabled] = useState(isEnabled)
   const [open, setOpen] = useState(true)
   // Seed from any previously-tried colors so a reload keeps the experiment.
-  const [main, setMain] = useState(() => readStored(KEY_MAIN) ?? DEFAULT_MAIN)
-  const [accent, setAccent] = useState(() => readStored(KEY_ACCENT) ?? DEFAULT_ACCENT)
+  const [hex, setHex] = useState(() => readStored(KEY_HEX) ?? DEFAULT_MAIN)
   const [copied, setCopied] = useState(false)
 
-  // Re-derive + inject the override CSS whenever a color changes.
+  // Re-derive + inject the override CSS whenever the anchor hex changes.
   useEffect(() => {
     if (!enabled) return
-    const css = themeCss(main, accent)
+    const css = themeCss(hex)
     applyCss(css)
     try {
-      localStorage.setItem(KEY_MAIN, main)
-      localStorage.setItem(KEY_ACCENT, accent)
+      localStorage.setItem(KEY_HEX, hex)
       localStorage.setItem(KEY_CSS, css)
     } catch {
       // ignore storage failures
     }
-  }, [enabled, main, accent])
+  }, [enabled, hex])
 
   if (!enabled) return null
 
   const reset = () => {
-    setMain(DEFAULT_MAIN)
-    setAccent(DEFAULT_ACCENT)
+    setHex(DEFAULT_MAIN)
     try {
-      localStorage.removeItem(KEY_MAIN)
-      localStorage.removeItem(KEY_ACCENT)
+      localStorage.removeItem(KEY_HEX)
       localStorage.removeItem(KEY_CSS)
     } catch {
       // ignore
@@ -75,7 +69,7 @@ export function ThemePicker() {
   }
 
   const copy = async () => {
-    const text = `--color-tint (main): ${main}\n--color-aqua (accent): ${accent}`
+    const text = `Anchor: ${hex}`
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
@@ -85,13 +79,8 @@ export function ThemePicker() {
     }
   }
 
-  const applyPreset = (m: string, a: string) => {
-    setMain(m)
-    setAccent(a)
-  }
-
-  // Formula-derived accent options for whatever main is currently chosen.
-  const suggestions = suggestAccents(main)
+  // Lightness variants around the current anchor.
+  const shades = suggestShades(hex)
 
   if (!open) {
     return (
@@ -119,10 +108,9 @@ export function ThemePicker() {
         </button>
       </div>
 
-      <Swatch label="Main" value={main} onChange={setMain} />
-      <Swatch label="Accent" value={accent} onChange={setAccent} />
+      <Swatch label="Anchor" value={hex} onChange={setHex} />
 
-      {/* Curated full looks — foolproof starting points. */}
+      {/* Curated monochromatic starting points. */}
       <p className="mb-1.5 mt-3 text-[11px] font-medium text-muted">Palettes</p>
       <div className="flex flex-wrap gap-1.5">
         {PRESETS.map((p) => (
@@ -130,30 +118,29 @@ export function ThemePicker() {
             key={p.name}
             type="button"
             title={p.name}
-            onClick={() => applyPreset(p.main, p.accent)}
+            onClick={() => setHex(p.hex)}
             aria-label={`Use ${p.name} palette`}
             className="flex h-6 w-10 overflow-hidden rounded-full ring-1 ring-ink/15 transition hover:ring-ink/40"
           >
-            <span className="h-full w-1/2" style={{ background: p.main }} />
-            <span className="h-full w-1/2" style={{ background: p.accent }} />
+            <span className="h-full w-full" style={{ background: p.hex }} />
           </button>
         ))}
       </div>
 
-      {/* Accents generated from the current main by colour-wheel formulas. */}
+      {/* Lightness variants of the current anchor hue. */}
       <p className="mb-1.5 mt-3 text-[11px] font-medium text-muted">
-        Suggested accents
+        Suggested shades
       </p>
       <div className="flex flex-wrap gap-1.5">
-        {suggestions.map((c) => (
+        {shades.map((c) => (
           <button
             key={c.hex}
             type="button"
             title={`${c.name} — ${c.hex}`}
-            onClick={() => setAccent(c.hex)}
-            aria-label={`Use ${c.name} accent ${c.hex}`}
+            onClick={() => setHex(c.hex)}
+            aria-label={`Use ${c.name} shade ${c.hex}`}
             className={`h-6 w-6 rounded-full ring-1 transition hover:scale-110 ${
-              accent.toLowerCase() === c.hex.toLowerCase()
+              hex.toLowerCase() === c.hex.toLowerCase()
                 ? 'ring-2 ring-ink/60'
                 : 'ring-ink/15'
             }`}
@@ -168,7 +155,7 @@ export function ThemePicker() {
           onClick={copy}
           className="flex-1 rounded-full bg-aqua px-3 py-2 text-xs font-semibold text-[#0b1417] transition hover:bg-aqua-deep hover:text-white"
         >
-          {copied ? 'Copied!' : 'Copy values'}
+          {copied ? 'Copied!' : 'Copy hex'}
         </button>
         <button
           type="button"
@@ -179,7 +166,7 @@ export function ThemePicker() {
         </button>
       </div>
       <p className="mt-2 text-[11px] leading-snug text-muted">
-        Affects light &amp; dark mode. Use the sun/moon to preview both.
+        Sets the anchor hue for the mono palette. Affects light &amp; dark mode.
       </p>
     </div>
   )

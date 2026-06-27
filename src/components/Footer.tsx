@@ -4,7 +4,7 @@ import { site } from '../config/site'
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-ink/5 bg-tint">
+    <footer className="mt-24 border-t border-ink/5 bg-[color-mix(in_oklch,var(--color-tint)_35%,var(--color-tint-soft)_65%)] dark:bg-surface">
       <Container className="grid gap-10 py-16 md:grid-cols-3">
         <div>
           <p className="font-serif text-2xl text-ink">{site.name} <span className="text-base text-muted">{site.tagline}</span></p>
@@ -28,7 +28,7 @@ export function Footer() {
           <Link to="/contact" className="mt-3 inline-block font-medium text-aqua-ink">Book a consultation →</Link>
         </div>
       </Container>
-      <Container className="border-t border-ink/5 py-6 text-xs text-muted">
+      <Container className="border-t border-ink/5 py-6 text-xs text-muted dark:border-white/10">
         © {new Date().getFullYear()} {site.name}. All rights reserved.
       </Container>
     </footer>

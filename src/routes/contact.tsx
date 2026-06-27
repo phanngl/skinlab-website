@@ -11,7 +11,7 @@ function Contact() {
   const mapQuery = encodeURIComponent(site.contact.address)
   return (
     <>
-      <section className="relative overflow-hidden bg-tint">
+      <section className="relative overflow-hidden bg-[color-mix(in_oklch,var(--color-tint)_35%,var(--color-tint-soft)_65%)] dark:bg-surface">
         <Gradient />
         <Container className="relative py-20 md:py-24">
           <Eyebrow>Contact</Eyebrow>
@@ -33,13 +33,13 @@ function Contact() {
             <h2 className="font-serif text-2xl text-ink">Opening hours</h2>
             <div className="mt-2 text-muted">
               {site.contact.hours.map((h) => (
-                <p key={h.day} className="flex justify-between border-b border-ink/5 py-2"><span>{h.day}</span><span>{h.time}</span></p>
+                <p key={h.day} className="flex justify-between border-b border-ink/5 py-2 dark:border-white/10"><span>{h.day}</span><span>{h.time}</span></p>
               ))}
             </div>
           </div>
           <iframe
             title="Clinic location"
-            className="h-64 w-full rounded-4xl border border-ink/5"
+            className="h-64 w-full rounded-4xl border border-ink/5 dark:border-white/10"
             loading="lazy"
             src={`https://www.google.com/maps?q=${mapQuery}&output=embed`}
           />

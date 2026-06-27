@@ -12,18 +12,18 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond Variable', Georgia, serif;
 
-  /* Accent: soft aqua pastel, complementary to the sky-blue main hue. */
-  --color-aqua: #cefff8;
-  --color-aqua-deep: #29a391;
-  --color-aqua-ink: #30a694;
-  /* Light theme built on a single sky-blue hue (#93e3fd) — no warm/yellow tones. */
-  --color-base: #e4eef1;
-  --color-surface: #f2f6f7;
-  --color-tint: #93e3fd;
-  --color-tint-soft: #b8e9fa;
-  --color-tint-card: #55d2fc;
-  --color-ink: #1d2f35;
-  --color-muted: #53686e;
+  /* Monochromatic palette — all tokens from the same ice-cyan hue (~171°),
+     Tailwind-style: lightness + saturation map to shade positions 50→950. */
+  --color-aqua: #e3f2f0;
+  --color-aqua-deep: #2bcab2;
+  --color-aqua-ink: #27685e;
+  --color-base: #f6f8f8;
+  --color-surface: #f4f6f6;
+  --color-tint: #adebe1;
+  --color-tint-soft: #d9f2ee;
+  --color-tint-card: #55e7d1;
+  --color-ink: #182523;
+  --color-muted: #447e75;
 
   --radius-4xl: 2rem;
 }
@@ -53,18 +53,24 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Slight webkit stroke gives the serif display faces a bit more substance
+   without distorting letterforms. 0.4px keeps it crisp at heading sizes. */
+.font-serif {
+  -webkit-text-stroke: 0.4px;
+}
+
 /* Dark theme: override the semantic tokens; every `bg-surface`/`text-ink`/etc.
    utility resolves these via var(), so the whole UI flips automatically. */
 .dark {
   color-scheme: dark;
-  /* Dark theme = nighttime version of the same sky-blue hue. */
-  --color-base: #0e1416;
-  --color-surface: #161f22;
-  --color-tint: #12191c;
-  --color-tint-soft: #1b2428;
-  --color-tint-card: #2c3a3f;
-  --color-ink: #e8eced;
-  --color-muted: #a9b7bc;
-  --color-aqua-ink: #acf6eb;
-  --color-aqua-deep: #6ce5d3;
+  /* Dark theme = nighttime version of the same ice-cyan hue (~171°). */
+  --color-base: #0c1211;
+  --color-surface: #20322f;
+  --color-tint: #121c1a;
+  --color-tint-soft: #263634;
+  --color-tint-card: #313f3d;
+  --color-ink: #e7eeed;
+  --color-muted: #9fbcb8;
+  --color-aqua-ink: #c4eee7;
+  --color-aqua-deep: #69d3c3;
 }
