@@ -12,3 +12,4 @@ dist-ssr
 .superpowers
 __unconfig*
 todos.json
+.playwright-mcp
